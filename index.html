@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checklist App</title>
+  <style>
+    html {
+      text-align: center;
+      background-color: beige;
+      font-weight: bold;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f9f9f9;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      padding: 6px;
+      width: 300px;
+    }
+
+    button {
+      margin: 10px 5px;
+      padding: 8px 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .checklist {
+      margin-top: 20px;
+    }
+
+    .checklist-item {
+      margin: 5px 0;
+      font-weight: normal;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="mainTitle">Choose List Type</h1>
+
+  <!-- Choice Buttons -->
+  <div id="choiceButtons">
+    <button onclick="selectList('todo')">📝 To-Do List</button>
+    <button onclick="selectList('goingout')">🎒 Going-Out Checklist</button>
+  </div>
+
+  <!-- Checklist App (hidden at first) -->
+  <div id="app" style="display: none;">
+    <div id="inputContainer">
+      <div class="input-group"><input type="text" placeholder="Item 1"></div>
+      <div class="input-group"><input type="text" placeholder="Item 2"></div>
+      <div class="input-group"><input type="text" placeholder="Item 3"></div>
+      <div class="input-group"><input type="text" placeholder="Item 4"></div>
+      <div class="input-group"><input type="text" placeholder="Item 5"></div>
+    </div>
+
+    <button onclick="addInput()">+ Add More Items</button>
+    <button onclick="generateChecklist()">Generate Checklist</button>
+
+    <div id="checklist" class="checklist"></div>
+  </div>
+
+  <script>
+    function selectList(type) {
+      const title = document.getElementById('mainTitle');
+      const app = document.getElementById('app');
+      const choice = document.getElementById('choiceButtons');
+
+      if (type === 'todo') {
+        title.textContent = "My To-Do List";
+      } else {
+        title.textContent = "My Going-Out Checklist";
+      }
+
+      app.style.display = 'block';
+      choice.style.display = 'none';
+    }
+
+    let itemCount = 5;
+
+    function addInput() {
+      itemCount++;
+      const container = document.getElementById('inputContainer');
+      const div = document.createElement('div');
+      div.className = 'input-group';
+      div.innerHTML = `<input type="text" placeholder="Item ${itemCount}">`;
+      container.appendChild(div);
+    }
+
+    function generateChecklist() {
+      const checklistDiv = document.getElementById('checklist');
+      checklistDiv.innerHTML = ""; // Clear previous list
+      const inputs = document.querySelectorAll('#inputContainer input');
+      const uniqueItems = new Set();
+      inputs.forEach(input => {
+        const value = input.value.trim();
+        const normalized = value.toLowerCase();
+        if (value !== "" && !uniqueItems.has(normalized)) {
+          uniqueItems.add(normalized);
+          const item = document.createElement('div');
+          item.className = 'checklist-item';
+          item.innerHTML = `<input type="checkbox"> ${value}`;
+          checklistDiv.appendChild(item);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
